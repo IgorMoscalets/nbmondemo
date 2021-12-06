@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #031227;
+  color: white;
+}
+.card{
+  color: white;
+  margin: 15px;
+  padding: 20px;
+  background-color: #770b81;
+}
+input{
+  background-color: #b6dbfd;
+  border: 3px solid #160b53;
+  border-radius: 8px;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
+}
+select{
+  background-color: #b6dbfd;
+  padding: 5px;
+  border-radius: 5px;
+}
+button{
+  background: #0c2568;
+  padding: 10px;
+  border: 3px solid #160b53;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600 !important;
+}
+.nbmonname{
+  font-weight: 600;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.value-input{
+  width: 50px;
+}
