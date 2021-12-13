@@ -5,15 +5,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #031227;
-  color: white;
+  background: rgb(2,0,36);
+background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,121,48,1) 27%, rgba(0,212,255,1) 100%);
+
+   color: white;
 }
 .card{
   color: white;
   margin: 15px;
   padding: 20px;
-  background-color: #770b81;
+  background-color: #42ba96;
 }
+
 input{
   background-color: #b6dbfd;
   border: 3px solid #160b53;
@@ -27,14 +30,6 @@ select{
   background-color: #b6dbfd;
   padding: 5px;
   border-radius: 5px;
-}
-button{
-  background: #0c2568;
-  padding: 10px;
-  border: 3px solid #160b53;
-  border-radius: 6px;
-  color: white;
-  font-weight: 600 !important;
 }
 .nbmonname{
   font-weight: 600;
