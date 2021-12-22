@@ -5,9 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(2,0,36);
-background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,121,48,1) 27%, rgba(0,212,255,1) 100%);
-
+  background: rgb(3,48,105);
+background: linear-gradient(90deg, rgba(3,48,105,1) 0%, rgba(9,121,69,1) 0%, rgba(0,104,255,1) 200%);
    color: white;
 }
 .card{

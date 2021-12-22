@@ -17,6 +17,37 @@
   width: 500px;
   margin: 40px auto;
 }
+.fa-heart{
+  color: red;
+}
+.fa-khanda{
+  color: #45df6d;
+}
+.fa-shield-alt{
+  color: #ffd400;
+}
+.nb-description{
+  text-align: center;
+}
+.card-icons{
+  margin-top: 0px;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.card-body{
+  padding: 0;
+}
+.nb-gallery-showcase{
+  margin-top: 10px;
+}
+.card-icons i:first-child{
+  padding-left: 0;
+}
+.card-icons i{
+  padding-left: 10px;
+  padding-right: 4px;
+}
 .realmhunter-logo img{
   width: 100%;
 }
@@ -26,11 +57,35 @@
 .navi-left{
   float: left;
 }
+.back-marketplace-button{
+  display: block;
+  float: right;
+  text-align: right;
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  background: rgba(100,100,100,0.3);
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 5px;
+}
+.row-solo{
+  width: 100%;
+}
+.back-marketplace-button:hover{
+  color: white;
+  background: rgba(100,100,100,0.5);
+}
 
 ul.nav{
   width: 100%;
   height: 60px;
   display: block;
+}
+
+.navigation{
+  margin-top: -100px;
+  margin-bottom: 40px;
 }
 
 .navigation button{
@@ -50,29 +105,26 @@ ul.nav{
   color: white;
 }
 .navigation li {
-  box-shadow: inset 0px 1px 0px 0px #a4e271;
-  background: linear-gradient(to bottom, #89c403 5%, #77a809 100%);
-  background-color: #89c403;
-  border-radius:3px;
-  border:1px solid #74b807;
   display:inline-block;
   cursor:pointer;
   color:#ffffff;
   padding: 3px 10px;
   margin: 0px 10px;
-  text-decoration:none;
   text-shadow:0px 1px 0px #528009;
+  background: rgba(255,255,255,0.1);
+  border-radius: 5px;
+
 }
 .nav-link{
   border: none !important;
   color: white;
 }
-.nav-link: hover{
+.nav-link:hover{
   border: none !important;
+  color: white;
 }
-.navigation li:hover {
-  background:linear-gradient(to bottom, #77a809 5%, #89c403 100%);
-  background-color:#77a809;
+.navigation li:hover{
+  background: rgba(255,255,255,0.15);
 }
 .navigation li:active {
   position:relative;
@@ -99,19 +151,69 @@ ul.nav{
   text-decoration: none;
 }
 .card{
-  background: rgb(63,94,251);
-background: linear-gradient(180deg, rgba(63,94,251,1) 70%, rgba(166,70,252,1) 120%);
+  background: rgba(0,0,0,0.1);
+  border: none;
 }
 .nb-card{
+  background: none;
+  border-radius: 8px;
+  padding: 0 !important;
+}
+.card-header{
+  padding: 5px 0px;
+  background: none;
+  border: none;
+}
+.nb-inside-card{
   background: rgb(63,94,251);
-background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(166,70,252,1) 100%);
--webkit-box-shadow: 10px 10px 47px -11px rgba(0,0,0,0.18);
--moz-box-shadow: 10px 10px 47px -11px rgba(0,0,0,0.18);
-box-shadow: 10px 10px 47px -11px rgba(0,0,0,0.18);
-
-border-radius: 10px;
-padding: 30px;
-margin: 5px;
+  background: rgba(255,255,255,0.05);
+-webkit-box-shadow: 0px 0px 9px 0px rgba(34, 60, 80, 0.05);
+-moz-box-shadow: 0px 0px 9px 0px rgba(34, 60, 80, 0.05);
+box-shadow: 0px 0px 9px 0px rgba(34, 60, 80, 0.05);
+  width: 100%;
+  padding: 30px;
+  padding-top: 5px;
+  padding-bottom: 15px;
+  border-radius: 8px;
+  text-align: center;
+  overflow: hidden;
+}
+.nb-image{
+  overflow: hidden;
+  height: 160px;
+  text-align: center;
+}
+.nbmon-background{
+  position: absolute;
+  opacity: 25%;
+  top: -70px;
+  left: 0;
+  z-index: -1;
+}
+.card-header .title{
+  margin-top: 5px;
+}
+.nb-image img{
+  width: 100%;
+}
+.filter-clear{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  text-decoration: underline;
+  font-size: 15px;
+}
+.form-check-input{
+  background: rgba(255,255,255,0.3);
+  border: none;
+  box-shadow: none !important;
+}
+.form-check-input:checked{
+  background: rgba(255,255,255,0.3);
+  box-shadow: none;
 }
 
 .App-header {
@@ -123,6 +225,114 @@ margin: 5px;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+.sort-block{
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+.gallery-block{
+  position: relative;
+  padding-top: 30px;
+}
+.nb-price b{
+  font-size: 23px;
+}
+.nb-price i{
+  font-style: normal;
+}
+.nb-description{
+  display: none;
+}
+
+.form-range-label{
+  display: block;
+}
+.form-range-input{
+  margin: 0;
+  background: rgba(255,255,255,0.3) !important;
+  appearance: none;
+  border: none;
+  height: 7px;
+  border-radius: 3px;
+  padding: 0;
+}
+.form-range-input::-webkit-slider-thumb{
+  appearance: none;
+  background: rgba(255,255,255,0.6) !important;
+  width: 15px;
+  height: 15px;
+  border-radius: 6px;
+}
+.form-range-input::-moz-slider-thumb{
+  appearance: none;
+  background: rgba(255,255,255,0.6) !important;
+  width: 15px;
+  height: 15px;
+  border-radius: 6px;
+}
+.form-range-label{
+  font-size: 15px;
+  margin-bottom: -5px;
+}
+.sort-block button{
+  background: rgba(255,255,255,0.1);
+  border-radius: 5px;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  margin: 0px 5px;
+}
+.largelogin{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300%;
+  background: rgba(3,48,105,0.6);
+  z-index: 1;
+}
+.login-title{
+  font-weight: 300;
+  font-size: 13px;
+  padding-bottom: 15px;
+  display: block;
+}
+.login-block{
+  margin: 70px auto;
+  text-align: center;
+  width: 300px;
+  min-height: 200px;
+  background: linear-gradient(90deg, rgba(3,48,105,1) 0%, rgba(9,121,69,1) 0%, rgba(0,104,255,1) 200%);
+  border-radius: 10px;
+  padding: 20px;
+  padding-bottom: 15px;
+}
+.login-showup{
+  margin-top: 15px;
+}
+.login-block input{
+  border: none;
+  background: rgba(255,255,255,0.2);
+  padding: 20px 15px;
+  height: 25px !important;
+  color: white;
+}
+.login-block input:focus-visible{
+  border: none !important;
+  box-shadow: none;
+  outline: none;
+  background: rgba(255,255,255,0.3);
+}
+.login-block button{
+  color: white;
+  background: rgba(255,255,255,0.2);
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+.login-block button:hover{
+  background: rgba(255,255,255,0.3);
 }
 
 .App-link {

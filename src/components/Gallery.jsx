@@ -8,7 +8,10 @@ import { useMoralis, useNativeBalance } from "react-moralis";
 import NBMon1 from "../nbmon1.png";
 import NBMon2 from "../nbmon2.png";
 import NBMon3 from "../nbmon3.png";
+import NBBackground from "../nbmon-background.png"
 import { Route, Routes } from "react-router-dom";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const TOKEN_CONTRACT_ADDRESS = "0x9A1158521a35032573BD96FBDeDbdd8867E74EF0";
 const PRICEGETTER_CONTRACT_ADDRESS = "0xf21F90585fD99281cefdfdb5A3307082FE62E2B7";
@@ -54,13 +57,22 @@ export const Gallery = ({ match }) : React.ReactElement => {
 			const element = (<div key={dogId} className="col-md-4">
 
 			<a className="nb-link" href={"/item/"+dogId.toString()}><div className="card nb-card">
+			<div className="nb-image">
+			<img src={NBBackground} className="nbmon-background"></img>
 			<img src={nftImageURI}></img>
-			<div className="nbmonname">{jsonResponse.name}</div> <br/>
-			Description: {jsonResponse.description} <br/>
-			Health: {d.health} <br/>
-			Stamina: {d.stamina} <br/>
-			Attack: {d.attack} <br/>
-			</div></a>
+			
+			</div>
+			<div className="nb-inside-card">
+			<div className="nbmonname">{jsonResponse.name}</div> 
+			<p className="card-icons"><i className="fas fa-heart"></i>{d.health} 
+			<i className="fas fa-khanda"></i>{d.stamina}  
+			<i className="fas fa-shield-alt"></i>{d.attack} </p> 
+			<div className="nb-price"><b>7777.777</b> <i>nbcoin</i> <br/> <i>777.77 usd</i></div>
+			<span className="nb-description">{jsonResponse.description}</span> 
+			
+			</div>
+			</div>
+			</a>
 			</div>);
 			setNBMons(oldArray => [...oldArray, element]);
 			console.log(d);
@@ -176,24 +188,80 @@ export const Gallery = ({ match }) : React.ReactElement => {
 		</header>
 		<div className="filter-content">
 			<div className="card-body">
+			<button className="filter-clear">Clear all</button>
 			<form>
 				<label className="form-check">
 				  <input className="form-check-input" type="checkbox" value="" />
 				  <span className="form-check-label">
-				    Super
+				    Common
 				  </span>
 				</label>
 				<label className="form-check">
 				  <input className="form-check-input" type="checkbox" value="" />
 				  <span className="form-check-label">
-				    Mega
+				    Uncommon
 				  </span>
 				</label> 
 				<label className="form-check">
 				  <input className="form-check-input" type="checkbox" value="" />
 				  <span className="form-check-label">
-				    Some
+				    Rare
 				  </span>
+				</label>  
+				<label className="form-check">
+				  <input className="form-check-input" type="checkbox" value="" />
+				  <span className="form-check-label">
+				    Very Rare
+				  </span>
+				</label>  
+				<label className="form-check">
+				  <input className="form-check-input" type="checkbox" value="" />
+				  <span className="form-check-label">
+				    Legendary
+				  </span>
+				</label>  
+			</form>
+
+			</div> 
+		</div>
+	</article> 
+	<article className="card-group-item">
+		<header className="card-header">
+			<h6 className="title">Characteristics </h6>
+		</header>
+		<div className="filter-content">
+			<div className="card-body">
+			<button className="filter-clear">Clear all</button>
+			<form>
+				<label className="form-range">
+				  <span className="form-range-label">
+				    HP
+				  </span>
+				  <input className="form-range-input" type="range" min="0" max="20"/>
+				</label>
+				<label className="form-range">
+				  <span className="form-range-label">
+				    Attack
+				  </span>
+				  <input className="form-range-input" type="range" min="0" max="20"/>
+				</label> 
+				<label className="form-range">
+				  <span className="form-range-label">
+				    Defense
+				  </span>
+				  <input className="form-range-input" type="range" min="0" max="20"/>
+				</label>  
+				<label className="form-range">
+				  <span className="form-range-label">
+				    Attack Speed
+				  </span>
+				  <input className="form-range-input" type="range" min="0" max="20"/>
+				</label>  
+				<label className="form-range">
+				  <span className="form-range-label">
+				    Speed
+				  </span>
+				  <input className="form-range-input" type="range" min="0" max="20"/>
 				</label>  
 			</form>
 
@@ -203,26 +271,26 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	
 	<article className="card-group-item">
 		<header className="card-header">
-			<h6 className="title">Other</h6>
+			<h6 className="title">Breed</h6>
 		</header>
 		<div className="filter-content">
 			<div className="card-body">
 			<label className="form-check">
 			  <input className="form-check-input" type="radio" name="exampleRadio" value="" />
 			  <span className="form-check-label">
-			    Monik
+			    Origin
 			  </span>
 			</label>
 			<label className="form-check">
 			  <input className="form-check-input" type="radio" name="exampleRadio" value="" />
 			  <span className="form-check-label">
-			    Descr
+			    Hybrid
 			  </span>
 			</label>
 			<label className="form-check">
 			  <input className="form-check-input" type="radio" name="exampleRadio" value="" />
 			  <span className="form-check-label">
-			    Char
+			    Wild
 			  </span>
 			</label>
 			</div>
@@ -231,8 +299,13 @@ export const Gallery = ({ match }) : React.ReactElement => {
 </div>
 
 		 </div>
-		 <div className="col-9">
-		 <div className="row">
+		 <div className="col-9 gallery-block">
+		 <div className="sort-block">
+		 	<button>Sort</button>
+		 	<button><i className="fas fa-th-large"></i></button>
+		 	<button><i className="fas fa-list"></i></button>
+		 </div>
+		 <div className="row nb-gallery-showcase">
 		 {NBMons}
 		 </div>
 		 </div>

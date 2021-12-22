@@ -4,6 +4,8 @@ import Token from "./contracts/Token.json"
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Marketplace, Navigation, Gallery} from "./components";
 
+
+
 import "./App.css"
 import RealmHunter from "./realmhunterlogo.png"
 import { useMoralis } from "react-moralis"
@@ -37,17 +39,26 @@ function App () {
 			console.log(dogId);
 
 			const element = (
-			<Route path={"/item/"+dogId} element={<div key={dogId} className="col-md-4 solo-nb">
+			<Route path={"/item/"+dogId} element={
+			<div className="row row-solo">
+			<div className="col-md-4">
+			<a href="/" className="back-marketplace-button">
+			
+			<i className="fas fa-arrow-left"> </i> Go back to the Marketplace</a></div>
+			<div key={dogId} className="col-md-4">
+			<div className="solo-nb">
 							
 			<a className="nb-link" href={"/item/"+dogId.toString()}><div className="card nb-card">
 			<img src={nftImageURI}></img>
 			<div className="nbmonname">{jsonResponse.name}</div> <br/>
-			Description: {jsonResponse.description} <br/>
-			Health: {d.health} <br/>
-			Stamina: {d.stamina} <br/>
-			Attack: {d.attack} <br/>
-			</div></a>
-			</div>} />
+			<span className="nb-description">{jsonResponse.description}</span> <br/>
+			<p className="card-icons"><i className="fas fa-heart"></i>{d.health} 
+			<i className="fas fa-khanda"></i>{d.stamina}  
+			<i className="fas fa-shield-alt"></i>{d.attack} </p> 
+			</div></a></div>
+			</div>
+			</div>
+		} />
 			);
 			setNBMons(oldArray => [...oldArray, element]);
 			console.log(element);
