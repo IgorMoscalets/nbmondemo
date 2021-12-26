@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import Token from "./contracts/Token.json"
+import NBMonCore from "./contracts/NBMonCore.json"
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Marketplace, Navigation, Gallery} from "./components";
 
@@ -11,25 +11,25 @@ import RealmHunter from "./realmhunterlogo.png"
 import { useMoralis } from "react-moralis"
 
 
-const TOKEN_CONTRACT_ADDRESS = "0x9A1158521a35032573BD96FBDeDbdd8867E74EF0";
+const TOKEN_CONTRACT_ADDRESS = "0x36B29994Df52Eb7A58D78F53E274963f24887EfB";
 
 
 function App () {
 	const { Moralis, isAuthenticated, authenticate, logout } = useMoralis();
-
+/*
 	const [NBMonsRouted, setNBMons] = useState([]);
 
 	const displayNBMons = async () => {
 		setNBMons([]);
-		const abi = Token.abi;
+		const abi = NBMonCore.abi;
 		const web3 = await Moralis.Web3.enableWeb3();
 		const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
-		const dataArray = await contract.methods.getAllTokensForUser(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
+		const dataArray = await contract.methods.getOwnerNBMonIds(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
 		
 		console.log(dataArray);
 		//for(const dogId of dataArray) {
 		dataArray.forEach(async (dogId) => {
-			const d = await contract.methods.getTokenDetails(dogId).call({from: web3.currentProvider.selectedAddress});
+			const d = await contract.methods.getNBMons(dogId).call({from: web3.currentProvider.selectedAddress});
 			const nftTokenURI = d.tokenURI;
 			const response = await fetch(nftTokenURI);
 			const jsonResponse = await response.json();
@@ -72,7 +72,7 @@ function App () {
 	  }
 	console.log("USEFE");
 	}, [isAuthenticated]);
-
+*/
     return(
       <BrowserRouter>
       <div className="realmhunter-logo">
@@ -84,7 +84,7 @@ function App () {
           <Route path="/" element={<Gallery />} />
           <Route path="/marketplace" element={<Marketplace />} />
 
-          {NBMonsRouted}
+          
           <Route path="/item/404" element={<div>gosdk</div>} />
           
         </Routes>

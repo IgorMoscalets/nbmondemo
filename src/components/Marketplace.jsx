@@ -1,14 +1,14 @@
 
 import { useEffect, useState } from "react";
 import PriceGetter from "../contracts/PriceGetter.json";
-import Token from "../contracts/Token.json"
+import NBMonCore from "../contracts/NBMonCore.json"
 import { useMoralis, useNativeBalance } from "react-moralis";
 import NBMon1 from "../nbmon1.png";
 import NBMon2 from "../nbmon2.png";
 import NBMon3 from "../nbmon3.png";
 
 
-const TOKEN_CONTRACT_ADDRESS = "0x9A1158521a35032573BD96FBDeDbdd8867E74EF0";
+const TOKEN_CONTRACT_ADDRESS = "0x36B29994Df52Eb7A58D78F53E274963f24887EfB";
 const PRICEGETTER_CONTRACT_ADDRESS = "0xf21F90585fD99281cefdfdb5A3307082FE62E2B7";
 
 export const Marketplace = () : React.ReactElement => {
@@ -30,15 +30,15 @@ export const Marketplace = () : React.ReactElement => {
   
   const displayNBMons = async () => {
     setNBMons([]);
-    const abi = Token.abi;
+    const abi = NBMonCore.abi;
     const web3 = await Moralis.Web3.enableWeb3();
     const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
-    const dataArray = await contract.methods.getAllTokensForUser(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
+    const dataArray = await contract.methods.getOwnerNBMonIds(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
     
     console.log(dataArray);
     //for(const dogId of dataArray) {
     dataArray.forEach(async (dogId) => {
-      const d = await contract.methods.getTokenDetails(dogId).call({from: web3.currentProvider.selectedAddress});
+      const d = await contract.methods.getNBMon(dogId).call({from: web3.currentProvider.selectedAddress});
       const nftTokenURI = d.tokenURI;
       const response = await fetch(nftTokenURI);
       const jsonResponse = await response.json();
@@ -80,6 +80,7 @@ export const Marketplace = () : React.ReactElement => {
     };
 
   const mintNBMon = async () => {
+    /*
     let nbmonimage = "";
     if(selectedImg == "Emily"){
       nbmonimage = await convertImageToBase64(NBMon1);
@@ -108,13 +109,14 @@ export const Marketplace = () : React.ReactElement => {
     const metaURL = metadataFile.ipfs();
 
     console.log(metaURL);
+    */
 
-    const abi = Token.abi;
+    const abi = NBMonCore.abi;
     const web3 = await Moralis.Web3.enableWeb3();
     const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
-
+    /*
     const totalPrice = 220;
-
+    
     const _finalAttack = attackPar;
     const _finalHealth = healthPar;
     const _finalStamina = staminaPar;
@@ -122,17 +124,34 @@ export const Marketplace = () : React.ReactElement => {
     const _finalPrice = web3.utils.toBN(totalPrice * 100000000000);
 
     console.log(_finalPrice);
-    console.log("FINAL PRICE");
+    console.log("FINAL PRICE");*/
 
-    const receipt = await contract.methods.mintExternal(_finalAttack,
+    /*const receipt = await contract.methods.mintExternal(_finalAttack,
       _finalHealth,
       _finalStamina,
       _finalURI,
       _finalPrice).send({from: web3.currentProvider.selectedAddress, value: _finalPrice});
+    */ 
+    const receipt = await contract.methods.mintNBMon("0x619DB0c27484167f18DE31a7756F5F23eEcc5Ca8").send({from: web3.currentProvider.selectedAddress});
     console.log(receipt);
 
+
+    const dataArray = await contract.methods.getOwnerNBMonIds(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
+    
+    console.log(dataArray);
+    //for(const dogId of dataArray) {
+    dataArray.forEach(async (NBMonId) => {
+      const d = await contract.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
+      //const nftTokenURI = d.tokenURI;
+      //const response = await fetch(nftTokenURI);
+      //const jsonResponse = await response.json();
+      //console.log(jsonResponse);
+      //setNBMons(oldArray => [...oldArray, element]);
+      console.log(d);
+    }); 
+
     getBSCbalance();
-    displayNBMons();
+    //displayNBMons();
 
     
   };
@@ -169,17 +188,6 @@ export const Marketplace = () : React.ReactElement => {
      : <div>
        <button onClick={() => logout()}>Log Out</button><br/>
      Current Balance: {bscBalance} BNB ({bscToUsdBalance} USD) <br/>
-
-     Enter Name: <input value={nftName} maxLength="40" onChange={e => setNftName(e.target.value)} type="text" /> <br/>
-     Health: <input className="value-input" value={healthPar} maxLength="40" onChange={e => setHealth(e.target.value)} type="number" />
-     Stamina: <input className="value-input" value={staminaPar} maxLength="40" onChange={e => setStamina(e.target.value)} type="number" />
-     Attack: <input className="value-input" value={attackPar} maxLength="40" onChange={e => setAttack(e.target.value)} type="number" /> <br/>
-     Enter Description: <input value={nftDescription} maxLength="40" onChange={e => setNftDescription(e.target.value)} type="text" /> <br/>
-     <select onChange={e => setSelectedImg(e.target.value)}>
-      <option value="Emily">Emily</option>
-      <option value="Bobby">Bobby</option>
-      <option value="James">James</option>
-       </select> <br/> <br/>
      <button onClick={mintNBMon}>Mint!</button> 
      <div className="row">{NBMons}</div>
      </div>}

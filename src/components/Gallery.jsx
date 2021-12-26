@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import PriceGetter from "../contracts/PriceGetter.json";
-import Token from "../contracts/Token.json"
+import NBMonCore from "../contracts/NBMonCore.json"
 import { Marketplace } from "../components"
 
 import { useMoralis, useNativeBalance } from "react-moralis";
@@ -13,7 +13,7 @@ import { Route, Routes } from "react-router-dom";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const TOKEN_CONTRACT_ADDRESS = "0x9A1158521a35032573BD96FBDeDbdd8867E74EF0";
+const TOKEN_CONTRACT_ADDRESS = "0x36B29994Df52Eb7A58D78F53E274963f24887EfB";
 const PRICEGETTER_CONTRACT_ADDRESS = "0xf21F90585fD99281cefdfdb5A3307082FE62E2B7";
 	
 
@@ -37,15 +37,17 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	
 	const displayNBMons = async () => {
 		setNBMons([]);
-		const abi = Token.abi;
+		const abi = NBMonCore.abi;
 		const web3 = await Moralis.Web3.enableWeb3();
 		const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
-		const dataArray = await contract.methods.getAllTokensForUser(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
+		const dataArray = await contract.methods.getOwnerNBMonIds(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
 		
 		console.log(dataArray);
 		//for(const dogId of dataArray) {
-		dataArray.forEach(async (dogId) => {
-			const d = await contract.methods.getTokenDetails(dogId).call({from: web3.currentProvider.selectedAddress});
+		dataArray.forEach(async (NBMonId) => {
+			const d = await contract.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
+			console.log(d);
+			/*
 			const nftTokenURI = d.tokenURI;
 			const response = await fetch(nftTokenURI);
 			const jsonResponse = await response.json();
@@ -53,22 +55,23 @@ export const Gallery = ({ match }) : React.ReactElement => {
 
 			const nftImageURI = jsonResponse.image;
 			console.log(dogId);
+			*/
 
-			const element = (<div key={dogId} className="col-md-4">
+			const element = (<div key={NBMonId} className="col-md-4">
 
-			<a className="nb-link" href={"/item/"+dogId.toString()}><div className="card nb-card">
+			<a className="nb-link" href={"/item/"+NBMonId.toString()}><div className="card nb-card">
 			<div className="nb-image">
 			<img src={NBBackground} className="nbmon-background"></img>
-			<img src={nftImageURI}></img>
+			<img src={NBMon3}></img>
 			
 			</div>
 			<div className="nb-inside-card">
-			<div className="nbmonname">{jsonResponse.name}</div> 
-			<p className="card-icons"><i className="fas fa-heart"></i>{d.health} 
-			<i className="fas fa-khanda"></i>{d.stamina}  
-			<i className="fas fa-shield-alt"></i>{d.attack} </p> 
+			<div className="nbmonname">Some Name</div> 
+			<p className="card-icons"><i className="fas fa-heart"></i>{d.combinationStats.substring(0,2)} 
+			<i className="fas fa-khanda"></i>{d.combinationStats.substring(2,4)}  
+			<i className="fas fa-shield-alt"></i>{d.combinationStats.substring(4,6)} </p> 
 			<div className="nb-price"><b>7777.777</b> <i>nbcoin</i> <br/> <i>777.77 usd</i></div>
-			<span className="nb-description">{jsonResponse.description}</span> 
+			<span className="nb-description">Some Description</span> 
 			
 			</div>
 			</div>
@@ -76,6 +79,7 @@ export const Gallery = ({ match }) : React.ReactElement => {
 			</div>);
 			setNBMons(oldArray => [...oldArray, element]);
 			console.log(d);
+			
 		}); 
 
 	};
@@ -126,7 +130,7 @@ export const Gallery = ({ match }) : React.ReactElement => {
 
 		console.log(metaURL);
 
-		const abi = Token.abi;
+		const abi = NBMonCore.abi;
 		const web3 = await Moralis.Web3.enableWeb3();
 		const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
 
