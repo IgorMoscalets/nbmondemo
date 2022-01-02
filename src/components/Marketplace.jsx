@@ -112,6 +112,13 @@ export const Marketplace = () : React.ReactElement => {
     */
 
     const abi = NBMonCore.abi;
+
+    const encodedAbiUploadFile = btoa(JSON.stringify(abi))
+    const AbiFile = new Moralis.File("NBMonCore.json", { base64: encodedAbiUploadFile })
+    const contractAbis = new Moralis.Object("contractAbis");
+    contractAbis.set("AbiFile", AbiFile);
+    contractAbis.set("Filename", "NBMonCore");
+    contractAbis.save();
     const web3 = await Moralis.Web3.enableWeb3();
     const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
     /*
