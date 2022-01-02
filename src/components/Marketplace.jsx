@@ -3,12 +3,20 @@ import { useEffect, useState } from "react";
 import PriceGetter from "../contracts/PriceGetter.json";
 import NBMonCore from "../contracts/NBMonCore.json"
 import { useMoralis, useNativeBalance } from "react-moralis";
-import NBMon1 from "../nbmon1.png";
-import NBMon2 from "../nbmon2.png";
-import NBMon3 from "../nbmon3.png";
+import Birvo from "../BirvoTransparent.png"
+import Dranexx from "../DranexxTransparent.png"
+import Lamox from "../LamoxPTransparent.png"
+import Licorine from "../LicorineTransparent.png"
+import Milnas from "../MilnasTransparent.png"
+import Pongu from "../PonguTransparent.png"
+import Roggo from "../RoggoTransparent.png"
+import Schoggi from "../SchoggiTransparent.png"
+import Teree from "../TereeTransparent.png"
+import Todillo from "../TodilloTransparent.png"
 
 
-const TOKEN_CONTRACT_ADDRESS = "0x36B29994Df52Eb7A58D78F53E274963f24887EfB";
+
+const TOKEN_CONTRACT_ADDRESS = "0x637bbb29aa81b6a32d309bdf4f53d80881f67c7f";
 const PRICEGETTER_CONTRACT_ADDRESS = "0xf21F90585fD99281cefdfdb5A3307082FE62E2B7";
 
 export const Marketplace = () : React.ReactElement => {
@@ -24,45 +32,17 @@ export const Marketplace = () : React.ReactElement => {
   const[attackPar, setAttack] = useState(0);
   const[staminaPar, setStamina] = useState(0);
 
+
+
+  const NBMonImages = [Lamox, Licorine, Birvo, Dranexx, Teree, Milnas, Pongu, Schoggi, Roggo, Todillo];
+
   const[selectedImg, setSelectedImg] = useState("Emily");
 
   const [NBMons, setNBMons] = useState([]);
+
+  const [mintedNBMon, setMintedNBMon] = useState();
   
-  const displayNBMons = async () => {
-    setNBMons([]);
-    const abi = NBMonCore.abi;
-    const web3 = await Moralis.Web3.enableWeb3();
-    const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
-    const dataArray = await contract.methods.getOwnerNBMonIds(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
-    
-    console.log(dataArray);
-    //for(const dogId of dataArray) {
-    dataArray.forEach(async (dogId) => {
-      const d = await contract.methods.getNBMon(dogId).call({from: web3.currentProvider.selectedAddress});
-      const nftTokenURI = d.tokenURI;
-      const response = await fetch(nftTokenURI);
-      const jsonResponse = await response.json();
-      console.log(jsonResponse);
-
-      const nftImageURI = jsonResponse.image;
-      console.log(dogId);
-
-      const element = (<div key={dogId} className="col-md-4">
-      <div className="card nbmon-card">
-      <img src={nftImageURI}></img>
-      <div className="nbmonname">{jsonResponse.name}</div> <br/>
-      Description: {jsonResponse.description} <br/>
-      Health: {d.health} <br/>
-      Stamina: {d.stamina} <br/>
-      Attack: {d.attack} <br/>
-      </div>
-      </div>);
-      setNBMons(oldArray => [...oldArray, element]);
-      console.log(d);
-    }); 
-
-  };
-
+  
   const convertImageToBase64 = async (urlImg) => {
     var img = new Image();
     img.src = urlImg;
@@ -78,6 +58,10 @@ export const Marketplace = () : React.ReactElement => {
     var b64 = canvas.toDataURL('image/png');
     return b64;
     };
+
+  const randomIntFromInterval = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
 
   const mintNBMon = async () => {
     /*
@@ -113,12 +97,12 @@ export const Marketplace = () : React.ReactElement => {
 
     const abi = NBMonCore.abi;
 
-    const encodedAbiUploadFile = btoa(JSON.stringify(abi))
-    const AbiFile = new Moralis.File("NBMonCore.json", { base64: encodedAbiUploadFile })
-    const contractAbis = new Moralis.Object("contractAbis");
-    contractAbis.set("AbiFile", AbiFile);
-    contractAbis.set("Filename", "NBMonCore");
-    contractAbis.save();
+    //const encodedAbiUploadFile = btoa(JSON.stringify(abi))
+    //const AbiFile = new Moralis.File("NBMonCore.json", { base64: encodedAbiUploadFile })
+    //const contractAbis = new Moralis.Object("contractAbis");
+    //contractAbis.set("AbiFile", AbiFile);
+    //contractAbis.set("Filename", "NBMonCore");
+    //contractAbis.save();
     const web3 = await Moralis.Web3.enableWeb3();
     const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
     /*
@@ -139,26 +123,60 @@ export const Marketplace = () : React.ReactElement => {
       _finalURI,
       _finalPrice).send({from: web3.currentProvider.selectedAddress, value: _finalPrice});
     */ 
-    const receipt = await contract.methods.mintNBMon("0x619DB0c27484167f18DE31a7756F5F23eEcc5Ca8").send({from: web3.currentProvider.selectedAddress});
+    const randomEggInt = randomIntFromInterval(0, 9007199254740900);
+    console.log(randomEggInt);
+    const receipt = await contract.methods.mintOrigin(randomEggInt, "0x619DB0c27484167f18DE31a7756F5F23eEcc5Ca8", 259200).send({from: web3.currentProvider.selectedAddress});
     console.log(receipt);
 
+    const NBMonId = receipt.events.NBMonMinted.returnValues._nbmonId - 1;
+    console.log(NBMonId);
 
-    const dataArray = await contract.methods.getOwnerNBMonIds(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
-    
-    console.log(dataArray);
-    //for(const dogId of dataArray) {
-    dataArray.forEach(async (NBMonId) => {
-      const d = await contract.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
-      //const nftTokenURI = d.tokenURI;
-      //const response = await fetch(nftTokenURI);
-      //const jsonResponse = await response.json();
-      //console.log(jsonResponse);
-      //setNBMons(oldArray => [...oldArray, element]);
-      console.log(d);
-    }); 
+    const d = await contract.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
+
+    const elementProps = ["Null", "Neutral", "Wind", "Earth", "Water", "Fire", "Nature", "Electric", "Mental", "Digital", "Melee", "Crystal", "Toxic"];
+		  const generaProps = ["Lamox", "Licorine", "Birvo", "Dranexx", "Heree", "Milnas", "Piklish", "Prawdek", "Roggo", "Todillo"];
+		  const genderProps = ["Male", "Female"];
+		  const typeProps = ["Origin", "Wild", "Hybrid"];
+		  const rarityProps = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythical"];
+	
+		  const gender = genderProps[parseInt(d.nbmonStats[0]) - 1];
+		  let rarity = rarityProps[0];
+		  const rarityVal = parseInt(d.nbmonStats[1]);
+		  if(rarityVal >= 1 && rarityVal <= 650){
+			rarity = rarityProps[0];
+		  }
+		  else if(rarityVal >= 651 && rarityVal <= 850){
+			rarity = rarityProps[1];
+		  }
+		  else if(rarityVal >= 851 && rarityVal <= 950){
+			rarity = rarityProps[2];
+		  }
+		  else if(rarityVal >= 951 && rarityVal <= 990){
+			rarity = rarityProps[3];
+		  }
+		  else if(rarityVal >= 991 && rarityVal <= 999){
+			rarity = rarityProps[4];
+		  }
+		  else if(rarityVal == 1000){
+			rarity = rarityProps[5];
+		  }
+		  const type = typeProps[parseInt(d.nbmonStats[3]) - 1];
+		  const genera = generaProps[parseInt(d.nbmonStats[5]) - 1];
+	
+	
+		  const element = (<div className="col-md-4">
+		  <div className="card nbmon-card">
+		  <img src={NBMonImages[parseInt(d.nbmonStats[5]) - 1]}></img>
+		  Gender: {gender}
+		  Rarity: {rarity}
+		  Type: {type}
+		  Genera: {genera}
+		  </div>
+		  </div>);
+
+      setMintedNBMon(element);
 
     getBSCbalance();
-    //displayNBMons();
 
     
   };
@@ -181,7 +199,6 @@ export const Marketplace = () : React.ReactElement => {
   useEffect(() => {
     if(isAuthenticated){
     getBSCbalance();
-    displayNBMons();
     }
   console.log("USEFE");
   }, [isAuthenticated]);
@@ -196,7 +213,7 @@ export const Marketplace = () : React.ReactElement => {
        <button onClick={() => logout()}>Log Out</button><br/>
      Current Balance: {bscBalance} BNB ({bscToUsdBalance} USD) <br/>
      <button onClick={mintNBMon}>Mint!</button> 
-     <div className="row">{NBMons}</div>
+     <div className="row">{mintedNBMon}</div>
      </div>}
     </div>  
       </div>

@@ -338,6 +338,38 @@ box-shadow: 0px 0px 9px 0px rgba(34, 60, 80, 0.05);
 .App-link {
   color: #61dafb;
 }
+.searchWrapper{
+  background: rgba(0,0,0,0.1);
+  border: none !important;
+}
+.searchBox{
+  color: white !important;
+}
+.optionContainer{
+  color: white;
+  background: rgba(83,152,120,1);
+  border: none !important;
+}
+.option:hover{
+  background: rgba(9,121,69,1) !important;
+}
+.highlightOption{
+  background: rgba(83,152,120,1) !important;
+}
+.chip {
+  background: rgba(83,152,120,1) !important;
+}
+
+::-webkit-scrollbar{
+  background: rgba(0,0,0,0.1);
+}
+::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.2);
+}
+
+.hidden-nbmon{
+  display: none;
+}
 
 @keyframes App-logo-spin {
   from {

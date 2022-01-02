@@ -4,6 +4,8 @@ import PriceGetter from "../contracts/PriceGetter.json";
 import NBMonCore from "../contracts/NBMonCore.json"
 import { Marketplace } from "../components"
 
+import Multiselect from 'multiselect-react-dropdown'
+
 import { useMoralis, useNativeBalance } from "react-moralis";
 import NBMon1 from "../nbmon1.png";
 import NBMon2 from "../nbmon2.png";
@@ -13,10 +15,22 @@ import { Route, Routes } from "react-router-dom";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const TOKEN_CONTRACT_ADDRESS = "0x36B29994Df52Eb7A58D78F53E274963f24887EfB";
+
+import Birvo from "../BirvoTransparent.png"
+import Dranexx from "../DranexxTransparent.png"
+import Lamox from "../LamoxPTransparent.png"
+import Licorine from "../LicorineTransparent.png"
+import Milnas from "../MilnasTransparent.png"
+import Pongu from "../PonguTransparent.png"
+import Roggo from "../RoggoTransparent.png"
+import Schoggi from "../SchoggiTransparent.png"
+import Teree from "../TereeTransparent.png"
+import Todillo from "../TodilloTransparent.png"
+import Prawdek from "../PrawdekTransparent.png"
+
+const TOKEN_CONTRACT_ADDRESS = "0x637bbb29aa81b6a32d309bdf4f53d80881f67c7f";
 const PRICEGETTER_CONTRACT_ADDRESS = "0xf21F90585fD99281cefdfdb5A3307082FE62E2B7";
 	
-
 export const Gallery = ({ match }) : React.ReactElement => {
 
 	const { Moralis, isAuthenticated, authenticate, logout } = useMoralis();
@@ -27,6 +41,12 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	const[nftName, setNftName] = useState("");
 	const[nftDescription, setNftDescription] = useState("");
 
+	const[elementSelected, setElementSelected] = useState();
+	const[generaSelected, setGeneraSelected] = useState();
+	const[genderSelected, setGenderSelected] = useState();
+	const[typeSelected, setTypeSelected] = useState();
+	const[raritySelected, setRaritySelected] = useState();
+
 	const[healthPar, setHealth] = useState(0);
 	const[attackPar, setAttack] = useState(0);
 	const[staminaPar, setStamina] = useState(0);
@@ -34,7 +54,32 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	const[selectedImg, setSelectedImg] = useState("Emily");
 
 	const [NBMons, setNBMons] = useState([]);
-	
+
+	const NBMonImages = [Lamox, Licorine, Birvo, Dranexx, Teree, Milnas, Schoggi, Pongu, Prawdek, Roggo, Todillo];
+
+
+
+	const elementFilters = ["Null", "Neutral", "Wind", "Earth", "Water", "Fire", "Nature", "Electric", "Mental", "Digital", "Melee", "Crystal", "Toxic"];
+	const elementOptions = elementFilters.map((val, idx) => ({name: val, id: idx}));
+	const generaFilters = ["Lamox", "Licorine", "Birvo", "Dranexx", "Heree", "Milnas", "Piklish", "Pongu", "Prawdek", "Roggo", "Todillo"];
+	const generaOptions = generaFilters.map((val, idx) => ({name: val, id: idx}));
+	const genderFilters = ["Male", "Female"];
+	const genderOptions = genderFilters.map((val, idx) => ({name: val, id: idx}));
+	const typeFilters = ["Origin", "Wild", "Hybrid"];
+	const typeOptions = typeFilters.map((val, idx) => ({name: val, id: idx}));
+	const rarityFilters = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythical"];
+	const rarityOptions = rarityFilters.map((val, idx) => ({name: val, id: idx}));
+
+	const arrangeNBMons = () => {
+		console.log(NBMons);
+		let newArr = NBMons;
+		
+		for(let i = 0; i < newArr.length; i++){
+			if(newArr[i]._rarity != "Common"){newArr[i]._hidden = true;}
+		}
+		console.log(newArr);
+	};
+
 	const displayNBMons = async () => {
 		setNBMons([]);
 		const abi = NBMonCore.abi;
@@ -44,46 +89,71 @@ export const Gallery = ({ match }) : React.ReactElement => {
 		
 		console.log(dataArray);
 		//for(const dogId of dataArray) {
-		dataArray.forEach(async (NBMonId) => {
-			const d = await contract.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
-			console.log(d);
-			/*
-			const nftTokenURI = d.tokenURI;
-			const response = await fetch(nftTokenURI);
-			const jsonResponse = await response.json();
-			console.log(jsonResponse);
+		for(let i = 0; i < dataArray.length; i++){
+			const dogId = dataArray[i];
+		  const d = await contract.methods.getNBMon(dogId).call({from: web3.currentProvider.selectedAddress});
+		  //const nftTokenURI = d.tokenURI;
+		  //const response = await fetch(nftTokenURI);
+		  //const jsonResponse = await response.json();
+		  //console.log(jsonResponse);
+	
+		  //const nftImageURI = jsonResponse.image;
+		  console.log(dogId);
+		  const elementProps = ["Null", "Neutral", "Wind", "Earth", "Water", "Fire", "Nature", "Electric", "Mental", "Digital", "Melee", "Crystal", "Toxic"];
+		  const generaProps = ["Lamox", "Licorine", "Birvo", "Dranexx", "Heree", "Milnas", "Piklish", "Pongu", "Prawdek", "Roggo", "Todillo"];
+		  const genderProps = ["Male", "Female"];
+		  const typeProps = ["Origin", "Wild", "Hybrid"];
+		  const rarityProps = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythical"];
+			console.log(d.nbmonStats);
+		  const gender = genderProps[parseInt(d.nbmonStats[0]) - 1];
+		  let rarity = rarityProps[0];
+		  const rarityVal = parseInt(d.nbmonStats[1]);
+		  if(rarityVal >= 1 && rarityVal <= 650){
+			rarity = rarityProps[0];
+		  }
+		  else if(rarityVal >= 651 && rarityVal <= 850){
+			rarity = rarityProps[1];
+		  }
+		  else if(rarityVal >= 851 && rarityVal <= 950){
+			rarity = rarityProps[2];
+		  }
+		  else if(rarityVal >= 951 && rarityVal <= 990){
+			rarity = rarityProps[3];
+		  }
+		  else if(rarityVal >= 991 && rarityVal <= 999){
+			rarity = rarityProps[4];
+		  }
+		  else if(rarityVal == 1000){
+			rarity = rarityProps[5];
+		  }
+		  const type = typeProps[parseInt(d.nbmonStats[3]) - 1];
+		  const genera = generaProps[parseInt(d.nbmonStats[5]) - 1];
 
-			const nftImageURI = jsonResponse.image;
-			console.log(dogId);
-			*/
-
-			const element = (<div key={NBMonId} className="col-md-4">
-
-			<a className="nb-link" href={"/item/"+NBMonId.toString()}><div className="card nb-card">
-			<div className="nb-image">
-			<img src={NBBackground} className="nbmon-background"></img>
-			<img src={NBMon3}></img>
-			
-			</div>
-			<div className="nb-inside-card">
-			<div className="nbmonname">Some Name</div> 
-			<p className="card-icons"><i className="fas fa-heart"></i>{d.combinationStats.substring(0,2)} 
-			<i className="fas fa-khanda"></i>{d.combinationStats.substring(2,4)}  
-			<i className="fas fa-shield-alt"></i>{d.combinationStats.substring(4,6)} </p> 
-			<div className="nb-price"><b>7777.777</b> <i>nbcoin</i> <br/> <i>777.77 usd</i></div>
-			<span className="nb-description">Some Description</span> 
-			
-			</div>
-			</div>
-			</a>
-			</div>);
-			setNBMons(oldArray => [...oldArray, element]);
-			console.log(d);
-			
-		}); 
-
-	};
-
+		  const hidden = false;
+		  
+		  console.log(gender+rarity+type+genera);
+	
+		  const element = (<div key={dogId - 2} className="col-md-4">
+		  <div className="card nbmon-card">
+		  <img src={NBMonImages[parseInt(d.nbmonStats[5]) - 1]}></img>
+		  Id: {d.nbmonId} <br/>
+		  Gender: {gender} <br/>
+		  Rarity: {rarity} <br/>
+		  Type: {type} <br/>
+		  Genera: {genera} <br/>
+		  </div>
+		  </div>);
+		  setNBMons(oldArray => [...oldArray, {nbcard: element, id: d.nbmonId, _gender: gender, _rarity: rarity, _type: type, _genera: genera, _hidden: hidden}]);
+		  console.log(d);
+		  console.log(NBMons);
+		  if(i == dataArray.length - 1){
+			console.log(NBMons);
+			arrangeNBMons();
+		  }
+		}
+	
+	  };
+	
 	const convertImageToBase64 = async (urlImg) => {
 		var img = new Image();
 		img.src = urlImg;
@@ -188,118 +258,74 @@ export const Gallery = ({ match }) : React.ReactElement => {
 		 	<div className="card">
 	<article className="card-group-item">
 		<header className="card-header">
-			<h6 className="title">Type </h6>
+			<h6 className="title">Element</h6>
 		</header>
 		<div className="filter-content">
 			<div className="card-body">
-			<button className="filter-clear">Clear all</button>
-			<form>
-				<label className="form-check">
-				  <input className="form-check-input" type="checkbox" value="" />
-				  <span className="form-check-label">
-				    Common
-				  </span>
-				</label>
-				<label className="form-check">
-				  <input className="form-check-input" type="checkbox" value="" />
-				  <span className="form-check-label">
-				    Uncommon
-				  </span>
-				</label> 
-				<label className="form-check">
-				  <input className="form-check-input" type="checkbox" value="" />
-				  <span className="form-check-label">
-				    Rare
-				  </span>
-				</label>  
-				<label className="form-check">
-				  <input className="form-check-input" type="checkbox" value="" />
-				  <span className="form-check-label">
-				    Very Rare
-				  </span>
-				</label>  
-				<label className="form-check">
-				  <input className="form-check-input" type="checkbox" value="" />
-				  <span className="form-check-label">
-				    Legendary
-				  </span>
-				</label>  
-			</form>
-
+			<Multiselect 
+			options={elementOptions}
+			selectedValues={elementSelected}
+			displayValue="name"
+			/>
+			</div> 
+		</div>
+	</article>
+	<article className="card-group-item">
+		<header className="card-header">
+			<h6 className="title">Genera</h6>
+		</header>
+		<div className="filter-content">
+			<div className="card-body">
+			<Multiselect 
+			options={generaOptions}
+			selectedValues={generaSelected}
+			displayValue="name"
+			/>
 			</div> 
 		</div>
 	</article> 
 	<article className="card-group-item">
 		<header className="card-header">
-			<h6 className="title">Characteristics </h6>
+			<h6 className="title">Gender</h6>
 		</header>
 		<div className="filter-content">
 			<div className="card-body">
-			<button className="filter-clear">Clear all</button>
-			<form>
-				<label className="form-range">
-				  <span className="form-range-label">
-				    HP
-				  </span>
-				  <input className="form-range-input" type="range" min="0" max="20"/>
-				</label>
-				<label className="form-range">
-				  <span className="form-range-label">
-				    Attack
-				  </span>
-				  <input className="form-range-input" type="range" min="0" max="20"/>
-				</label> 
-				<label className="form-range">
-				  <span className="form-range-label">
-				    Defense
-				  </span>
-				  <input className="form-range-input" type="range" min="0" max="20"/>
-				</label>  
-				<label className="form-range">
-				  <span className="form-range-label">
-				    Attack Speed
-				  </span>
-				  <input className="form-range-input" type="range" min="0" max="20"/>
-				</label>  
-				<label className="form-range">
-				  <span className="form-range-label">
-				    Speed
-				  </span>
-				  <input className="form-range-input" type="range" min="0" max="20"/>
-				</label>  
-			</form>
-
+			<Multiselect 
+			options={genderOptions}
+			selectedValues={genderSelected}
+			displayValue="name"
+			/>
 			</div> 
 		</div>
 	</article> 
-	
 	<article className="card-group-item">
 		<header className="card-header">
-			<h6 className="title">Breed</h6>
+			<h6 className="title">Type</h6>
 		</header>
 		<div className="filter-content">
 			<div className="card-body">
-			<label className="form-check">
-			  <input className="form-check-input" type="radio" name="exampleRadio" value="" />
-			  <span className="form-check-label">
-			    Origin
-			  </span>
-			</label>
-			<label className="form-check">
-			  <input className="form-check-input" type="radio" name="exampleRadio" value="" />
-			  <span className="form-check-label">
-			    Hybrid
-			  </span>
-			</label>
-			<label className="form-check">
-			  <input className="form-check-input" type="radio" name="exampleRadio" value="" />
-			  <span className="form-check-label">
-			    Wild
-			  </span>
-			</label>
-			</div>
+			<Multiselect 
+			options={typeOptions}
+			selectedValues={typeSelected}
+			displayValue="name"
+			/>
+			</div> 
 		</div>
-	</article> 
+	</article>
+	<article className="card-group-item">
+		<header className="card-header">
+			<h6 className="title">Rarity</h6>
+		</header>
+		<div className="filter-content">
+			<div className="card-body">
+			<Multiselect 
+			options={rarityOptions}
+			selectedValues={raritySelected}
+			displayValue="name"
+			/>
+			</div> 
+		</div>
+	</article>   
 </div>
 
 		 </div>
@@ -310,7 +336,7 @@ export const Gallery = ({ match }) : React.ReactElement => {
 		 	<button><i className="fas fa-list"></i></button>
 		 </div>
 		 <div className="row nb-gallery-showcase">
-		 {NBMons}
+		 {NBMons.map((item) => {if(item._hidden == false){return item.nbcard}})}
 		 </div>
 		 </div>
 		 </div>

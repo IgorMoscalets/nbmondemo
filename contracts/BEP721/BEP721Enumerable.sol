@@ -12,16 +12,16 @@ import "./IBEP721Enumerable.sol";
  */
 abstract contract BEP721Enumerable is BEP721, IBEP721Enumerable {
     // Mapping from owner to list of owned token IDs
-    mapping(address => mapping(uint256 => uint256)) private _ownedTokens;
+    mapping(address => mapping(uint256 => uint256)) internal _ownedTokens;
 
     // Mapping from token ID to index of the owner tokens list
-    mapping(uint256 => uint256) private _ownedTokensIndex;
+    mapping(uint256 => uint256) internal _ownedTokensIndex;
 
     // Array with all token ids, used for enumeration
-    uint256[] private _allTokens;
+    uint256[] internal _allTokens;
 
     // Mapping from token id to position in the allTokens array
-    mapping(uint256 => uint256) private _allTokensIndex;
+    mapping(uint256 => uint256) internal _allTokensIndex;
 
     /**
      * @dev See {IBEP165-supportsInterface}.
@@ -88,34 +88,34 @@ abstract contract BEP721Enumerable is BEP721, IBEP721Enumerable {
     }
 
     /**
-     * @dev Private function to add a token to this extension's ownership-tracking data structures.
+     * @dev Internal function to add a token to this extension's ownership-tracking data structures.
      * @param to address representing the new owner of the given token ID
      * @param tokenId uint256 ID of the token to be added to the tokens list of the given address
      */
-    function _addTokenToOwnerEnumeration(address to, uint256 tokenId) private {
+    function _addTokenToOwnerEnumeration(address to, uint256 tokenId) internal virtual {
         uint256 length = BEP721.balanceOf(to);
         _ownedTokens[to][length] = tokenId;
         _ownedTokensIndex[tokenId] = length;
     }
 
     /**
-     * @dev Private function to add a token to this extension's token tracking data structures.
+     * @dev Internal function to add a token to this extension's token tracking data structures.
      * @param tokenId uint256 ID of the token to be added to the tokens list
      */
-    function _addTokenToAllTokensEnumeration(uint256 tokenId) private {
+    function _addTokenToAllTokensEnumeration(uint256 tokenId) internal virtual {
         _allTokensIndex[tokenId] = _allTokens.length;
         _allTokens.push(tokenId);
     }
 
     /**
-     * @dev Private function to remove a token from this extension's ownership-tracking data structures. Note that
+     * @dev Internal function to remove a token from this extension's ownership-tracking data structures. Note that
      * while the token is not assigned a new owner, the `_ownedTokensIndex` mapping is _not_ updated: this allows for
      * gas optimizations e.g. when performing a transfer operation (avoiding double writes).
      * This has O(1) time complexity, but alters the order of the _ownedTokens array.
      * @param from address representing the previous owner of the given token ID
      * @param tokenId uint256 ID of the token to be removed from the tokens list of the given address
      */
-    function _removeTokenFromOwnerEnumeration(address from, uint256 tokenId) private {
+    function _removeTokenFromOwnerEnumeration(address from, uint256 tokenId) internal virtual {
         // To prevent a gap in from's tokens array, we store the last token in the index of the token to delete, and
         // then delete the last slot (swap and pop).
 
@@ -136,11 +136,11 @@ abstract contract BEP721Enumerable is BEP721, IBEP721Enumerable {
     }
 
     /**
-     * @dev Private function to remove a token from this extension's token tracking data structures.
+     * @dev Internal function to remove a token from this extension's token tracking data structures.
      * This has O(1) time complexity, but alters the order of the _allTokens array.
      * @param tokenId uint256 ID of the token to be removed from the tokens list
      */
-    function _removeTokenFromAllTokensEnumeration(uint256 tokenId) private {
+    function _removeTokenFromAllTokensEnumeration(uint256 tokenId) internal virtual {
         // To prevent a gap in the tokens array, we store the last token in the index of the token to delete, and
         // then delete the last slot (swap and pop).
 
