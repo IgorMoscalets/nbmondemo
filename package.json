@@ -13,6 +13,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "@truffle/hdwallet-provider": "^2.0.0",
+    "@walletconnect/web3-provider": "^1.7.0",
     "history": "^5.1.0",
     "ipfs-car": "^0.6.0",
     "moralis": "^0.0.143",
