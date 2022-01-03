@@ -210,9 +210,7 @@ export const Marketplace = () : React.ReactElement => {
     <button onClick={() => authenticate()}> Authenticate </button>
     
      : <div>
-       <button onClick={() => logout()}>Log Out</button><br/>
-     Current Balance: {bscBalance} BNB ({bscToUsdBalance} USD) <br/>
-     <button onClick={mintNBMon}>Mint!</button> 
+     <button className="mintAnEgg" onClick={mintNBMon}>Mint an EGG!</button> 
      <div className="row">{mintedNBMon}</div>
      </div>}
     </div>  

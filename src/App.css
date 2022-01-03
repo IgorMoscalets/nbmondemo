@@ -370,6 +370,15 @@ box-shadow: 0px 0px 9px 0px rgba(34, 60, 80, 0.05);
 .hidden-nbmon{
   display: none;
 }
+.mintAnEgg{
+  margin: 0 auto;
+  display: block;
+  background: rgba(0,0,0,0.1);
+  border: none;
+  padding: 30px;
+  color: white;
+  border-radius: 5px;
+}
 
 @keyframes App-logo-spin {
   from {
