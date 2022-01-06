@@ -78,47 +78,40 @@ export const Gallery = ({ match }) : React.ReactElement => {
 		});
 		selectedList = selectedListNames;
 		console.log(selectedList);
-		let newArr = NBMons;
-		setNBMons([]);
+		
 
-		for(let i = 0; i < newArr.length; i++){
-			if(listName == "Rarity"){
-				if(!selectedList.includes(newArr[i]._rarity)){
-					newArr[i]._hidden = true;
-				}
-				else if(selectedList.includes(newArr[i]._rarity)){
-					newArr[i]._hidden = false;
-				}
+		if(listName == "Rarity"){
+			if(selectedList.length == 0){
+				setRaritySelected(rarityFilters);
 			}
-			else if(listName == "Type"){
-				if(!selectedList.includes(newArr[i]._type)){
-					newArr[i]._hidden = true;
-				}
-				else if(selectedList.includes(newArr[i]._type)){
-					newArr[i]._hidden = false;
-				}
+			else{
+				setRaritySelected(selectedList);
 			}
-			else if(listName == "Gender"){
-				if(!selectedList.includes(newArr[i]._gender)){
-					newArr[i]._hidden = true;
-				}
-				else if(selectedList.includes(newArr[i]._gender)){
-					newArr[i]._hidden = false;
-				}
-			}
-			else if(listName == "Genera"){
-				if(!selectedList.includes(newArr[i]._genera)){
-					newArr[i]._hidden = true;
-				}
-				else if(selectedList.includes(newArr[i]._genera)){
-					newArr[i]._hidden = false;
-				}
-			}
-			setNBMons(oldArray => [...oldArray, newArr[i]]);
 		}
-		console.log(newArr);
-
-
+		else if(listName == "Type"){
+			if(selectedList.length == 0){
+				setTypeSelected(typeFilters);
+			}
+			else{
+				setTypeSelected(selectedList);
+			}
+		}
+		else if(listName == "Gender"){
+			if(selectedList.length == 0){
+				setGenderSelected(genderFilters);
+			}
+			else{
+				setGenderSelected(selectedList);
+			}
+		}
+		else if(listName == "Genera"){
+			if(selectedList.length == 0){
+				setGeneraSelected(generaFilters);
+			}
+			else{
+				setGeneraSelected(selectedList);
+			}
+		}
 		console.log(selectedList);
 		//let newArr = NBMons;
 		
@@ -128,7 +121,41 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	//	console.log(newArr);
 	};
 
+	useEffect(() => {
+		console.log(generaSelected + genderSelected + typeSelected + raritySelected);
+
+		let newArr = NBMons;
+		setNBMons([]);
+		
+		for(let i = 0; i < newArr.length; i++){
+			if(!raritySelected.includes(newArr[i]._rarity)){
+				newArr[i]._hidden = true;
+			}
+			else if(!typeSelected.includes(newArr[i]._type)){
+				newArr[i]._hidden = true;
+			}
+			else if(!genderSelected.includes(newArr[i]._gender)){
+				newArr[i]._hidden = true;
+			}
+			else if(!generaSelected.includes(newArr[i]._genera)){
+				newArr[i]._hidden = true;
+			}
+			else{
+				newArr[i]._hidden = false;
+			}
+			setNBMons(oldArray => [...oldArray, newArr[i]]);
+		}
+		console.log(newArr);
+
+
+	}, [raritySelected, typeSelected, genderSelected, generaSelected]);
+
 	const displayNBMons = async () => {
+		setGeneraSelected(generaFilters);
+		setTypeSelected(typeFilters);
+		setGenderSelected(genderFilters);
+		setRaritySelected(rarityFilters);
+
 		setNBMons([]);
 		const abi = NBMonCore.abi;
 		const web3 = await Moralis.Web3.enableWeb3();
@@ -309,7 +336,6 @@ export const Gallery = ({ match }) : React.ReactElement => {
 			<div className="card-body">
 			<Multiselect 
 			options={elementOptions}
-			selectedValues={elementSelected}
 			displayValue="name"
 			onSelect={arrangeNBMons}
 			onRemove={arrangeNBMons}
@@ -325,7 +351,6 @@ export const Gallery = ({ match }) : React.ReactElement => {
 			<div className="card-body">
 			<Multiselect 
 			options={generaOptions}
-			selectedValues={generaSelected}
 			displayValue="name"
 			onSelect={(selectedList, selectedItem) => {arrangeNBMons(selectedList, "Genera")}}
 			onRemove={(selectedList, removedItem) => {arrangeNBMons(selectedList, "Genera")}}
@@ -357,7 +382,6 @@ export const Gallery = ({ match }) : React.ReactElement => {
 			<div className="card-body">
 			<Multiselect 
 			options={typeOptions}
-			selectedValues={typeSelected}
 			displayValue="name"
 			onSelect={(selectedList, selectedItem) => {arrangeNBMons(selectedList, "Type")}}
 			onRemove={(selectedList, removedItem) => {arrangeNBMons(selectedList, "Type")}}
@@ -373,7 +397,6 @@ export const Gallery = ({ match }) : React.ReactElement => {
 			<div className="card-body">
 			<Multiselect 
 			options={rarityOptions}
-			selectedValues={raritySelected}
 			displayValue="name"
 			onSelect={(selectedList, selectedItem) => {arrangeNBMons(selectedList, "Rarity")}}
 			onRemove={(selectedList, removedItem) => {arrangeNBMons(selectedList, "Rarity")}}
