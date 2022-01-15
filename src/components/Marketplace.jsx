@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import PriceGetter from "../contracts/PriceGetter.json";
 import NBMonCore from "../contracts/NBMonCore.json"
+import NBMonMinting from "../contracts/NBMonMinting.json"
 import { useMoralis, useNativeBalance } from "react-moralis";
 import Birvo from "../BirvoTransparent.png"
 import Dranexx from "../DranexxTransparent.png"
@@ -18,6 +19,9 @@ import Todillo from "../TodilloTransparent.png"
 
 const TOKEN_CONTRACT_ADDRESS = "0x637bbb29aa81b6a32d309bdf4f53d80881f67c7f";
 const PRICEGETTER_CONTRACT_ADDRESS = "0xf21F90585fD99281cefdfdb5A3307082FE62E2B7";
+
+const NBMONMINTING_CONTRACT_ADDRESS = "0xd59916ee966152fab4f3fa23eb8187ee5a4fde18";
+const NBMONCORE_CONTRACT_ADDRESS = "0xd798f8c1480f4b2c4ef16c1878a99aa5d2b9bb96";
 
 export const Marketplace = () : React.ReactElement => {
   const { Moralis, isAuthenticated, authenticate, logout } = useMoralis();
@@ -97,14 +101,25 @@ export const Marketplace = () : React.ReactElement => {
 
     const abi = NBMonCore.abi;
 
-    //const encodedAbiUploadFile = btoa(JSON.stringify(abi))
-    //const AbiFile = new Moralis.File("NBMonCore.json", { base64: encodedAbiUploadFile })
-    //const contractAbis = new Moralis.Object("contractAbis");
-    //contractAbis.set("AbiFile", AbiFile);
-    //contractAbis.set("Filename", "NBMonCore");
-    //contractAbis.save();
+    const encodedAbiUploadFile = btoa(JSON.stringify(abi))
+    const AbiFile = new Moralis.File("NBMonCore.json", { base64: encodedAbiUploadFile })
+    const contractAbis = new Moralis.Object("contractAbis");
+    contractAbis.set("AbiFile", AbiFile);
+    contractAbis.set("Filename", "NBMonCore");
+    contractAbis.save();
+
+    const abi2 = NBMonMinting.abi
+    const encodedAbiUploadFile2 = btoa(JSON.stringify(abi2))
+    const AbiFile2 = new Moralis.File("NBMonMinting.json", { base64: encodedAbiUploadFile2 })
+    const contractAbis2 = new Moralis.Object("contractAbis");
+    contractAbis2.set("AbiFile", AbiFile2);
+    contractAbis2.set("Filename", "NBMonMinting");
+    contractAbis2.save();
+
+
     const web3 = await Moralis.Web3.enableWeb3();
-    const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
+    const contract = new web3.eth.Contract(abi2, NBMONMINTING_CONTRACT_ADDRESS);
+    const contractCore = new web3.eth.Contract(abi, NBMONCORE_CONTRACT_ADDRESS);
     /*
     const totalPrice = 220;
     
@@ -125,13 +140,13 @@ export const Marketplace = () : React.ReactElement => {
     */ 
     const randomEggInt = randomIntFromInterval(0, 9007199254740900);
     console.log(randomEggInt);
-    const receipt = await contract.methods.mintOrigin(randomEggInt, "0x619DB0c27484167f18DE31a7756F5F23eEcc5Ca8", 259200).send({from: web3.currentProvider.selectedAddress});
+    const receipt = await contract.methods.mintOrigin(randomEggInt, "0x619DB0c27484167f18DE31a7756F5F23eEcc5Ca8").send({from: web3.currentProvider.selectedAddress});
     console.log(receipt);
 
     const NBMonId = receipt.events.NBMonMinted.returnValues._nbmonId - 1;
     console.log(NBMonId);
 
-    const d = await contract.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
+    const d = await contractCore.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
 
     const elementProps = ["Null", "Neutral", "Wind", "Earth", "Water", "Fire", "Nature", "Electric", "Mental", "Digital", "Melee", "Crystal", "Toxic"];
 		  const generaProps = ["Lamox", "Licorine", "Birvo", "Dranexx", "Heree", "Milnas", "Piklish", "Prawdek", "Roggo", "Todillo"];

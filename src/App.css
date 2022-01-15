@@ -95,6 +95,24 @@ ul.nav{
 .solo-nb{
   margin: 0 auto;
 }
+.solo-nb .fas{
+  display: inline-block;
+  word-wrap:unset;
+  width: 100px;
+  padding-top: 5px;
+}
+.fapot{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 3px;
+}
+.solo-nb a, .nb-gallery-showcase a{
+  text-decoration: none;
+}
+.nbmon-card{
+  text-decoration: none !important;
+}
 .navi-login{
   background: linear-gradient(to bottom, #42ba96 5%, #3ab993 100%) !important;
   border:1px solid #35a583 !important;
@@ -388,3 +406,5 @@ box-shadow: 0px 0px 9px 0px rgba(34, 60, 80, 0.05);
     transform: rotate(360deg);
   }
 }
+
+

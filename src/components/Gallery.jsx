@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import PriceGetter from "../contracts/PriceGetter.json";
 import NBMonCore from "../contracts/NBMonCore.json"
+import NBMonMinting from "../contracts/NBMonMinting.json"
 import { Marketplace } from "../components"
 
 import Multiselect from 'multiselect-react-dropdown'
@@ -30,6 +31,9 @@ import Prawdek from "../PrawdekTransparent.png"
 
 const TOKEN_CONTRACT_ADDRESS = "0x637bbb29aa81b6a32d309bdf4f53d80881f67c7f";
 const PRICEGETTER_CONTRACT_ADDRESS = "0xf21F90585fD99281cefdfdb5A3307082FE62E2B7";
+const NBMONCORE_CONTRACT_ADDRESS = "0xd798f8c1480f4b2c4ef16c1878a99aa5d2b9bb96";
+const NBMONMINTING_CONTRACT_ADDRESS = "0xd59916ee966152fab4f3fa23eb8187ee5a4fde18";
+
 	
 export const Gallery = ({ match }) : React.ReactElement => {
 
@@ -70,6 +74,11 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	const typeOptions = typeFilters.map((val, idx) => ({name: val, id: idx}));
 	const rarityFilters = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythical"];
 	const rarityOptions = rarityFilters.map((val, idx) => ({name: val, id: idx}));
+
+	const passivesFilter = ["Cold Shield", "Spirits Shield", "Tenacity Shield", "Hammer Shield", "Healing Essence", "Restoring Essence", 
+"Last Health Essence", "Phantom Essence", "Energy Banner", "Revitalizing Banner", "Life Banner",
+"Charging Banner", "Flaming Sword", "Soul-Shattering Sword", "Avenger Sword", "Jakugan Sword", "Amulet of Haste",
+"Widow Amulet", "Supercharged Amulet", "Osur's Amulet", "Enraged Mask", "Mask of Darkness", "Fury Mask", "Baltasar's Mask"];
 
 	const arrangeNBMons = (selectedList, listName) => {
 		let selectedListNames = [];
@@ -157,9 +166,9 @@ export const Gallery = ({ match }) : React.ReactElement => {
 		setRaritySelected(rarityFilters);
 
 		setNBMons([]);
-		const abi = NBMonCore.abi;
+		const abi = NBMonMinting.abi;
 		const web3 = await Moralis.Web3.enableWeb3();
-		const contract = new web3.eth.Contract(abi, TOKEN_CONTRACT_ADDRESS);
+		const contract = new web3.eth.Contract(abi, NBMONMINTING_CONTRACT_ADDRESS);
 		const dataArray = await contract.methods.getOwnerNBMonIds(web3.currentProvider.selectedAddress).call({from: web3.currentProvider.selectedAddress});
 		
 		console.log(dataArray);
@@ -174,6 +183,7 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	
 		  //const nftImageURI = jsonResponse.image;
 		  console.log(dogId);
+		  console.log(d);
 		  const elementProps = ["Null", "Neutral", "Wind", "Earth", "Water", "Fire", "Nature", "Electric", "Mental", "Digital", "Melee", "Crystal", "Toxic"];
 		  const generaProps = ["Lamox", "Licorine", "Birvo", "Dranexx", "Heree", "Milnas", "Piklish", "Pongu", "Prawdek", "Roggo", "Todillo"];
 		  const genderProps = ["Male", "Female"];
@@ -202,20 +212,20 @@ export const Gallery = ({ match }) : React.ReactElement => {
 			rarity = rarityProps[5];
 		  }
 		  const type = typeProps[parseInt(d.nbmonStats[3]) - 1];
-		  const genera = generaProps[parseInt(d.nbmonStats[5]) - 1];
+		  const genera = generaProps[parseInt(d.nbmonStats[4]) - 1];
 
 		  const hidden = false;
 		  
 		  console.log(gender+rarity+type+genera);
 	
 		  const element = (<div key={dogId - 2} className="col-md-4">
-		  <div className="card nbmon-card">
-		  <img src={NBMonImages[parseInt(d.nbmonStats[5]) - 1]}></img>
+		  <a href={"/nbmons/" + dogId}><div className="card nbmon-card">
+		  <img src={NBMonImages[parseInt(d.nbmonStats[4]) - 1]}></img>
 		  Gender: {gender} <br/>
 		  Rarity: {rarity} <br/>
 		  Type: {type} <br/>
 		  Genera: {genera} <br/>
-		  </div>
+		  </div></a>
 		  </div>);
 		  setNBMons(oldArray => [...oldArray, {nbcard: element, id: d.nbmonId, _gender: gender, _rarity: rarity, _type: type, _genera: genera, _hidden: hidden}]);
 		  console.log(d);
@@ -330,7 +340,7 @@ export const Gallery = ({ match }) : React.ReactElement => {
 		 	<div className="card">
 	<article className="card-group-item">
 		<header className="card-header">
-			<h6 className="title">Element</h6>
+			<h6 className="title">Types</h6>
 		</header>
 		<div className="filter-content">
 			<div className="card-body">
@@ -345,7 +355,7 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	</article>
 	<article className="card-group-item">
 		<header className="card-header">
-			<h6 className="title">Genera</h6>
+			<h6 className="title">Genus</h6>
 		</header>
 		<div className="filter-content">
 			<div className="card-body">
@@ -376,7 +386,7 @@ export const Gallery = ({ match }) : React.ReactElement => {
 	</article> 
 	<article className="card-group-item">
 		<header className="card-header">
-			<h6 className="title">Type</h6>
+			<h6 className="title">Species</h6>
 		</header>
 		<div className="filter-content">
 			<div className="card-body">
