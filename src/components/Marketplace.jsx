@@ -140,7 +140,7 @@ export const Marketplace = () : React.ReactElement => {
     */ 
     const randomEggInt = randomIntFromInterval(0, 9007199254740900);
     console.log(randomEggInt);
-    const receipt = await contract.methods.mintOrigin(randomEggInt, "0x619DB0c27484167f18DE31a7756F5F23eEcc5Ca8").send({from: web3.currentProvider.selectedAddress});
+    const receipt = await contract.methods.mintOrigin(randomEggInt, web3.currentProvider.selectedAddress).send({from: web3.currentProvider.selectedAddress});
     console.log(receipt);
 
     const NBMonId = receipt.events.NBMonMinted.returnValues._nbmonId - 1;
