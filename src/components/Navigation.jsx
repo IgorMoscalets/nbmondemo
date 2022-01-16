@@ -58,14 +58,9 @@ export const Navigation = () : React.ReactElement => {
 	const loginAddEmail = async () => {
 		Moralis.User.currentAsync().then(async function(user){
 			setShowPassword(true);
-			console.log(user.get("username"));
-			if(user.get("username").includes("@")){
-				if(user.get("username") == email){
-					setShowLoginAlready(true);
-				}
-				else{
-					alert("This wallet is already registered on our site. Please use the correct email.")
-				}
+			console.log(user.get("email"));
+			if(user.get("email") != undefined){
+				setShowLoginAlready(true);
 			}
 			else{
 				setShowLoginAlready(false);
@@ -75,10 +70,9 @@ export const Navigation = () : React.ReactElement => {
 	const loginWithPassword = async () => {
 		try{
 			const user = await Moralis.User.logIn(email, loginPassword);
-			console.log("someshit"+email+loginPassword);
 		} catch(error){
 			alert("Invalid password");
-			logout();
+			loginWithPassword();
 		} finally{
 		setShowLogin(false);
 		setIsLoggedIn(true);
@@ -87,8 +81,8 @@ export const Navigation = () : React.ReactElement => {
 	};
 	const signUpWithPassword = async () => {
 		Moralis.User.currentAsync().then(async function(user){
-			user.setUsername(email);
-			user.setPassword(signUpPassword);
+			user.set("email", email);
+			user.set("password", signUpPassword);
 			await user.save();
 			setShowLogin(false);
 			setIsLoggedIn(true);
@@ -101,15 +95,14 @@ export const Navigation = () : React.ReactElement => {
 	};
 
 	useEffect(() => {
-	if(isAuthenticated || isLoggedIn){
-	Moralis.User.currentAsync().then(function(user){
-	  if(user.get("username").includes("@")){
+	  if(isAuthenticated || isLoggedIn){
 	  	setIsLoggedIn(true);
 		getBSCbalance();
-		setShowCurEmail(user.get("username"));
-		}
-	  });
-	}
+		Moralis.User.currentAsync().then(function(user){
+			setShowCurEmail(user.get("email"));
+		});
+	  }
+	console.log("USEFE");
 	}, [isAuthenticated, isLoggedIn]);
 
 
@@ -132,7 +125,7 @@ export const Navigation = () : React.ReactElement => {
 			 <button className="nav-link" onClick={logUserOut}>Log Out</button>
 		
 		 </li>
-		 <span className="balance-show">{showCurEmail} : {bscBalance} BNB ({bscToUsdBalance} USD)</span></div>}
+		 <span className="balance-show"><span className="useremail-show">{showCurEmail}</span> <span className="balance-part">{bscBalance} BNB ({bscToUsdBalance} USD)</span></span></div>}
 
 		 <li className="nav-item navi-right">
 		    <a className="nav-link" href="/contact">Contact Us</a>
@@ -145,16 +138,16 @@ export const Navigation = () : React.ReactElement => {
 				<input value={email} onChange={handleEmailChange} placeholder="email" />
 				<button onClick={loginAddEmail}>Enter your email</button>
 				{showPassword && <div> {showLoginAlready ? 
-				<div className="login-showup">
+				<div>
 					Log In with your password.
 					<input value={loginPassword} onChange={handleLoginPassword} placeholder="password" />
 					<button onClick={loginWithPassword}>Log In</button>
 				</div>
 					: 
-				<div className="login-showup">
+				<div>
 					Sign Up with new password.
 					<input value={signUpPassword} onChange={handleSignUpPassword} placeholder="password" />
-					<button onClick={signUpWithPassword}>Sign Up</button>
+					<button onClick={signUpWithPassword}>Log In</button>
 				</div>
 				} </div>}
 			</div>

@@ -406,5 +406,55 @@ box-shadow: 0px 0px 9px 0px rgba(34, 60, 80, 0.05);
     transform: rotate(360deg);
   }
 }
+.balance-show{
+  width: 99%;
+}
+.useremail-show{
+  float: left;
+  text-align: left;
+}
 
+.balance-part{
+  text-align: right;
+  float: right;
+}
 
+.mintAnEgg{
+  background: none;
+  width: 250px;
+}
+.mintAnEgg img{
+  width: 100%;
+}
+.nb-egg-container{
+  margin: 0 auto;
+}
+.nb-egg{
+  background: none;
+  position: relative;
+}
+.egg-opened-back{
+  position: absolute;
+  top: 0;
+  width: 250px;
+}
+.egg-nbmon{
+  position: absolute;
+  top: 0;
+  width: 150px;
+  left: 80px;
+}
+.egg-opened-front{
+  position: absolute;
+  top: 0;
+  width: 250px;
+}
+.full-egg-description{
+  margin-top: 250px;  
+}
+.confetti-bg{
+  position: absolute;
+  top: 0;
+  left: -400px;
+  width: 1200px;
+}

@@ -15,6 +15,12 @@ import Schoggi from "../SchoggiTransparent.png"
 import Teree from "../TereeTransparent.png"
 import Todillo from "../TodilloTransparent.png"
 
+import EggClosed from "../eggclosed.png"
+import EggOpenedBack from "../eggopenedback.png"
+import EggOpenedFront from "../eggopenedfront.png"
+
+import Confetti from "../confetti.gif"
+
 
 
 const TOKEN_CONTRACT_ADDRESS = "0x637bbb29aa81b6a32d309bdf4f53d80881f67c7f";
@@ -36,7 +42,12 @@ export const Marketplace = () : React.ReactElement => {
   const[attackPar, setAttack] = useState(0);
   const[staminaPar, setStamina] = useState(0);
 
+  const[showEgg, setShowEgg] = useState(true);
 
+  const passivesFilter = ["Cold Shield", "Spirits Shield", "Tenacity Shield", "Hammer Shield", "Healing Essence", "Restoring Essence", 
+"Last Health Essence", "Phantom Essence", "Energy Banner", "Revitalizing Banner", "Life Banner",
+"Charging Banner", "Flaming Sword", "Soul-Shattering Sword", "Avenger Sword", "Jakugan Sword", "Amulet of Haste",
+"Widow Amulet", "Supercharged Amulet", "Osur's Amulet", "Enraged Mask", "Mask of Darkness", "Fury Mask", "Baltasar's Mask"];
 
   const NBMonImages = [Lamox, Licorine, Birvo, Dranexx, Teree, Milnas, Pongu, Schoggi, Roggo, Todillo];
 
@@ -143,11 +154,11 @@ export const Marketplace = () : React.ReactElement => {
     const receipt = await contract.methods.mintOrigin(randomEggInt, web3.currentProvider.selectedAddress).send({from: web3.currentProvider.selectedAddress});
     console.log(receipt);
 
-    const NBMonId = receipt.events.NBMonMinted.returnValues._nbmonId - 1;
+    const NBMonId = parseInt(receipt.events.NBMonMinted.returnValues._nbmonId) - 1;
     console.log(NBMonId);
 
-    const d = await contractCore.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
-
+    const d = await contract.methods.getNBMon(NBMonId).call({from: web3.currentProvider.selectedAddress});
+    setShowEgg(false);
     const elementProps = ["Null", "Neutral", "Wind", "Earth", "Water", "Fire", "Nature", "Electric", "Mental", "Digital", "Melee", "Crystal", "Toxic"];
 		  const generaProps = ["Lamox", "Licorine", "Birvo", "Dranexx", "Heree", "Milnas", "Piklish", "Prawdek", "Roggo", "Todillo"];
 		  const genderProps = ["Male", "Female"];
@@ -176,16 +187,34 @@ export const Marketplace = () : React.ReactElement => {
 			rarity = rarityProps[5];
 		  }
 		  const type = typeProps[parseInt(d.nbmonStats[3]) - 1];
-		  const genera = generaProps[parseInt(d.nbmonStats[5]) - 1];
+		  const genera = generaProps[parseInt(d.nbmonStats[4]) - 1];
+      const passives = [passivesFilter[parseInt(d.passives[0])], passivesFilter[parseInt(d.passives[1])]];
 	
 	
-		  const element = (<div className="col-md-4">
-		  <div className="card nbmon-card">
-		  <img src={NBMonImages[parseInt(d.nbmonStats[5]) - 1]}></img>
-		  Gender: {gender}
-		  Rarity: {rarity}
-		  Type: {type}
-		  Genera: {genera}
+		  const element = (
+      <div className="col-md-4 nb-egg-container">
+		  <div className="card nbmon-card nb-egg">
+      <img src={Confetti} className="confetti-bg"></img>
+      <img src={EggOpenedBack} className="egg-opened-back"></img>
+		  <img src={NBMonImages[parseInt(d.nbmonStats[4]) - 1]} className="egg-nbmon"></img>
+      <img src={EggOpenedFront} className="egg-opened-front"></img>
+      <span className="full-egg-description">
+		  Gender: {gender} <br/>
+		  Rarity: {rarity} <br/>
+		  Type: {type} <br/>
+		  Genera: {genera} <br/>
+      Passives: {passives[0]}, {passives[1]} <br/>
+			Inherited Passives: None <br/>
+			Inherited Moves: None <br/>
+			Potential Stats: <br/>
+			<span className="fas fa-briefcase-medical"><i className="fapot">{d.potential[0]}</i></span> Health<br/>
+			<span className="fas fa-fire-alt"><i className="fapot">{d.potential[1]}</i></span> Energy<br/>
+			<span className="fas fa-khanda"><i className="fapot">{d.potential[2]}</i></span> Attack <br/>
+			<span className="fas fa-shield-alt"><i className="fapot">{d.potential[3]}</i></span> Defense<br/>
+			<span className="fab fa-gripfire"><i className="fapot">{d.potential[4]}</i></span> Special Attack<br/>
+			<span className="fab fa-hive"><i className="fapot">{d.potential[5]}</i></span> Special Defense<br/>
+			<span className="fas fa-road"><i className="fapot">{d.potential[6]}</i></span> Speed<br/>
+      </span>
 		  </div>
 		  </div>);
 
@@ -225,8 +254,8 @@ export const Marketplace = () : React.ReactElement => {
     <button onClick={() => authenticate()}> Authenticate </button>
     
      : <div>
-     <button className="mintAnEgg" onClick={mintNBMon}>Mint an EGG!</button> 
-     <div className="row">{mintedNBMon}</div>
+     {showEgg ? <button className="mintAnEgg" onClick={mintNBMon}><img src={EggClosed} className="eggclosed-img"></img></button> : <div className="row">{mintedNBMon}</div>}
+     
      </div>}
     </div>  
       </div>
