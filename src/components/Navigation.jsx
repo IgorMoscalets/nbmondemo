@@ -128,7 +128,7 @@ export const Navigation = () : React.ReactElement => {
 		 <span className="balance-show"><span className="useremail-show">{showCurEmail}</span> <span className="balance-part">{bscBalance} BNB ({bscToUsdBalance} USD)</span></span></div>}
 
 		 <li className="nav-item navi-right">
-		    <a className="nav-link" href="/contact">Contact Us</a>
+		    <a className="nav-link" href="https://nbcompany.io/contact-us">Contact Us</a>
 		  </li>
 		</ul>
 
